@@ -1,0 +1,240 @@
+/* assets/css/style.css */
+
+/* ==========================================================================
+   1. CSS VARIABLES & THEME (Tailwind-inspired color palette)
+   ========================================================================== */
+   :root {
+    --primary: #2563eb;       /* Blue 600 */
+    --primary-hover: #1d4ed8; /* Blue 700 */
+    --secondary: #475569;     /* Slate 600 */
+    --success: #10b981;       /* Emerald 500 */
+    --danger: #ef4444;        /* Red 500 */
+    --warning: #f59e0b;       /* Amber 500 */
+    
+    --bg-main: #f8fafc;       /* Slate 50 */
+    --bg-sidebar: #0f172a;    /* Slate 900 */
+    --card-bg: #ffffff;
+    
+    --text-main: #1e293b;     /* Slate 800 */
+    --text-muted: #64748b;    /* Slate 500 */
+    --text-light: #f1f5f9;    /* Slate 100 */
+    
+    --border-color: #e2e8f0;  /* Slate 200 */
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* ==========================================================================
+   2. GLOBAL RESET & TYPOGRAPHY
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    line-height: 1.6;
+    display: flex; /* Enables the Sidebar layout */
+    min-height: 100vh;
+}
+
+h1, h2, h3 { color: var(--text-main); margin-bottom: 15px; }
+h2 { font-size: 1.8rem; font-weight: 700; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 25px;}
+
+/* ==========================================================================
+   3. AUTOMATIC SIDEBAR LAYOUT (Targets your existing HTML structure)
+   ========================================================================== */
+/* The header becomes a fixed sidebar */
+body > header {
+    background-color: var(--bg-sidebar);
+    width: 260px;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    z-index: 50;
+}
+
+/* Sidebar Branding/Logo area */
+body > header h1 {
+    color: white;
+    font-size: 1.5rem;
+    padding: 25px 20px;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+/* Sidebar Navigation */
+body > header nav {
+    flex: 1;
+    margin-top: 20px;
+}
+
+body > header nav ul {
+    list-style: none;
+}
+
+body > header nav ul li a {
+    display: block;
+    padding: 15px 25px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+body > header nav ul li a:hover {
+    background-color: rgba(255,255,255,0.05);
+    color: white;
+    border-left: 4px solid var(--primary);
+}
+
+/* The main content area shifts right to make room for the sidebar */
+body > main {
+    margin-left: 260px; /* Same as sidebar width */
+    padding: 40px;
+    width: calc(100% - 260px);
+    max-width: 1400px;
+}
+
+/* ==========================================================================
+   4. PUBLIC HOMEPAGE & AUTHENTICATION OVERRIDES
+   ========================================================================== */
+/* For pages without the dashboard sidebar (like Login/Register) */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    margin-left: 0 !important; /* Overrides sidebar margin */
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.auth-card {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 450px;
+}
+
+.auth-card h2 { border: none; text-align: center; color: var(--primary); }
+
+/* ==========================================================================
+   5. CARDS, FORMS, AND BUTTONS
+   ========================================================================== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+input[type="text"], input[type="email"], input[type="password"], 
+input[type="date"], input[type="time"], select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f8fafc;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    background-color: white;
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    transition: background 0.3s, transform 0.1s;
+}
+
+.btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+/* ==========================================================================
+   6. DATA TABLES
+   ========================================================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-top: 15px;
+}
+
+thead { background-color: var(--bg-sidebar); color: white; }
+
+th { padding: 15px; text-align: left; font-weight: 600; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;}
+
+td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-muted); }
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background-color: #f8fafc; color: var(--text-main); }
+
+/* ==========================================================================
+   7. MODALS
+   ========================================================================== */
+.modal-overlay {
+    display: none; 
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.7); /* Dark slate overlay */
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-actions { margin-top: 25px; display: flex; justify-content: center; gap: 15px; }
+.btn-secondary { background: var(--secondary); color: white; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold;}
+.btn-secondary:hover { background: #334155; }
