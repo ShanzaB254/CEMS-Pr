@@ -7,7 +7,7 @@
 /* Modern Sidebar */
 .sidebar {
     width: 260px;
-    background-color: #0f172a; /* Slate 900 */
+    background-color:  #0f172a;   
     color: white;
     display: flex;
     flex-direction: column;
@@ -15,6 +15,7 @@
     height: 100vh;
     box-shadow: 4px 0 15px rgba(0,0,0,0.05);
 }
+ 
 
 .sidebar-header {
     padding: 24px;
@@ -49,7 +50,7 @@
 .nav-item.active { background-color: var(--primary); color: white; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2); }
 
 .sidebar-footer { padding: 20px; border-top: 1px solid #1e293b; }
-.nav-item-danger { color: #ef4444; }
+.nav-item-danger { color: red; }
 .nav-item-danger:hover { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
 /* Main Content Area */

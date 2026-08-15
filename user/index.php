@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
 require_once '../includes/manage-db/db_connect.php';
 $user_id = $_SESSION['user_id'];
 
-// Fetch APPROVED events the user is NOT registered for
+// Fetch APPROVED events that have NOT ended, and the user is NOT already registered for
 $sql = "SELECT e.id, e.title, e.description, e.event_date, e.event_time, e.venue, u.name AS organizer_name 
         FROM events e
         JOIN users u ON e.organizer_id = u.id
-        WHERE e.status = 'approved' AND e.event_date >= CURDATE()
+        WHERE e.status = 'approved' AND e.is_ended = FALSE
         AND e.id NOT IN (SELECT event_id FROM registrations WHERE user_id = $user_id)
         ORDER BY e.event_date ASC";
 
@@ -34,7 +34,10 @@ $result = $conn->query($sql);
     
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>Campus Life</h2>
+            <h2 style="display: flex; align-items: center; gap: 12px;">
+                <img src="../assets/images/logo.png" alt="Logo" style="height: 35px; width: 35px; border-radius: 6px;">
+                Campus Life
+            </h2>
         </div>
         <nav class="sidebar-nav">
             <a href="index.php" class="nav-item active">Discover Events</a>
@@ -65,21 +68,21 @@ $result = $conn->query($sql);
                         <h3 style="color: #1e3a8a; margin: 0; font-size: 1.25rem;"><?php echo htmlspecialchars($row['title']); ?></h3>
                         
                         <div class="event-meta">
-                            📅 <?php echo date('M d, Y', strtotime($row['event_date'])); ?> at <?php echo date('h:i A', strtotime($row['event_time'])); ?><br>
-                            📍 <?php echo htmlspecialchars($row['venue']); ?><br>
-                            🎓 Hosted by: <strong><?php echo htmlspecialchars($row['organizer_name']); ?></strong>
+                         <?php echo date('M d, Y', strtotime($row['event_date'])); ?> at <?php echo date('h:i A', strtotime($row['event_time'])); ?><br>
+                             <?php echo htmlspecialchars($row['venue']); ?><br>
+                             Hosted by: <strong><?php echo htmlspecialchars($row['organizer_name']); ?></strong>
                         </div>
                         
                         <div class="event-desc">
                             <?php echo htmlspecialchars(substr($row['description'], 0, 120)) . '...'; ?>
                         </div>
                         
-                        <a href="register.php?id=<?php echo $row['id']; ?>" class="btn btn-primary" style="background: #3b82f6; width: 100%;">Register Now</a>
+                        <a href="manage-events/register_event.php?id=<?php echo $row['id']; ?>" class="btn btn-primary" style="background: #3b82f6; width: 100%;">Register Now</a>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
                 <div style="grid-column: 1 / -1; padding: 40px; text-align: center; background: white; border-radius: 12px; border: 1px dashed var(--border-color);">
-                    <h3 style="color: var(--text-muted);">You're all caught up!</h3>
+                    <h3 style="color: var(--text-muted); margin-bottom: 10px;">You're all caught up!</h3>
                     <p style="color: var(--text-muted); margin: 0;">There are no new upcoming events available for registration at this time.</p>
                 </div>
             <?php endif; ?>

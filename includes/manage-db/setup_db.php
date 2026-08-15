@@ -33,6 +33,7 @@ $table_events = "CREATE TABLE IF NOT EXISTS events (
     event_time TIME NOT NULL,
     venue VARCHAR(255) NOT NULL,
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+   is_ended BOOLEAN DEFAULT FALSE, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE
 )";

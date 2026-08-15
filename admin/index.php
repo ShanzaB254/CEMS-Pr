@@ -27,8 +27,8 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - CEMS</title>
-    <link rel="stylesheet" href="../assets/css/common.css">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/common.css?v=<?php echo filemtime('../assets/css/common.css'); ?>">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=<?php echo filemtime('../assets/css/admin.css'); ?>"> 
 </head>
 <body>
 

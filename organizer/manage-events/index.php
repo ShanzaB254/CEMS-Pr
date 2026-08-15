@@ -10,8 +10,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'organizer') {
 require_once '../../includes/manage-db/db_connect.php';
 $organizer_id = $_SESSION['user_id'];
 
-// Pull organizer events, mapping attendee and volunteer counts cleanly with subqueries
-$sql = "SELECT id, title, event_date, event_time, venue, status,
+// Added 'is_ended' to the SELECT query
+$sql = "SELECT id, title, event_date, event_time, venue, status, is_ended,
         (SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND type = 'attendee') AS attendee_count,
         (SELECT COUNT(*) FROM registrations WHERE event_id = events.id AND type = 'volunteer') AS volunteer_count
         FROM events 
@@ -25,7 +25,8 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <title>Manage My Events - CEMS</title>
     <link rel="stylesheet" href="../../assets/css/common.css">
-    <link rel="stylesheet" href="../../assets/css/organizer.css">
+      <link rel="stylesheet" href="../../assets/css/organizer.css?v=<?php echo filemtime('../../assets/css/organizer.css'); ?>"> 
+    <!-- <link rel="stylesheet" href="../../assets/css/organizer.css"> -->
 </head>
 <body>
 
@@ -33,13 +34,16 @@ $result = $conn->query($sql);
     
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h2>CEMS Portal</h2>
+            <h2 style="display: flex; align-items: center; gap: 12px;">
+        
+                CEMS Portal
+            </h2>
         </div>
         <nav class="sidebar-nav">
             <a href="../index.php" class="nav-item">Dashboard</a>
             <a href="index.php" class="nav-item active">Manage Events</a>
             <a href="../participants.php" class="nav-item">Rosters</a>
-            <a href="feedback.php" class="nav-item">Events Feedback</a>
+            <a href="feedback.php" class="nav-item">View Feedback</a>
             <a href="../notifications.php" class="nav-item">Mass Broadcasts</a>
         </nav>
         <div class="sidebar-footer">
@@ -86,13 +90,24 @@ $result = $conn->query($sql);
                                     <strong><?php echo $row['volunteer_count']; ?></strong> Volunteers
                                 </td>
                                 <td>
-                                    <span class="badge badge-<?php echo strtolower($row['status']); ?>">
-                                        <?php echo htmlspecialchars($row['status']); ?>
-                                    </span>
+                                    <!-- Status Badge Logic updated to check for 'ended' state -->
+                                    <?php if ($row['is_ended'] == 1): ?>
+                                        <span class="badge" style="background-color: #e2e8f0; color: #475569;">Ended</span>
+                                    <?php else: ?>
+                                        <span class="badge badge-<?php echo strtolower($row['status']); ?>">
+                                            <?php echo htmlspecialchars($row['status']); ?>
+                                        </span>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <div style="display: flex; gap: 8px;">
                                         <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn" style="background: var(--secondary); color: white; padding: 6px 12px; font-size: 0.85rem;">Edit</a>
+                                        
+                                        <!-- Show 'End Event' button ONLY if approved and not already ended -->
+                                        <?php if ($row['status'] === 'approved' && $row['is_ended'] == 0): ?>
+                                            <a href="end_event.php?id=<?php echo $row['id']; ?>" class="btn trigger-modal" data-action="approve" style="background: #f59e0b; color: white; padding: 6px 12px; font-size: 0.85rem;">End Event</a>
+                                        <?php endif; ?>
+                                        
                                         <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn trigger-modal" data-action="delete" style="background: var(--danger); color: white; padding: 6px 12px; font-size: 0.85rem;">Cancel</a>
                                     </div>
                                 </td>

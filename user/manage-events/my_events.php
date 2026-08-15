@@ -10,14 +10,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
 require_once '../../includes/manage-db/db_connect.php';
 $user_id = $_SESSION['user_id'];
 
+// Fetch Upcoming Events (Not Ended)
 $upcoming_sql = "SELECT e.id, e.title, e.event_date, e.event_time, e.venue, r.type, u.name AS organizer_name 
-                 FROM registrations r JOIN events e ON r.event_id = e.id JOIN users u ON e.organizer_id = u.id
-                 WHERE r.user_id = $user_id AND e.event_date >= CURDATE() ORDER BY e.event_date ASC";
+                 FROM registrations r 
+                 JOIN events e ON r.event_id = e.id 
+                 JOIN users u ON e.organizer_id = u.id
+                 WHERE r.user_id = $user_id AND e.is_ended = FALSE 
+                 ORDER BY e.event_date ASC";
 $upcoming_result = $conn->query($upcoming_sql);
 
+// Fetch Past Events (Manually Ended by Organizer)
 $past_sql = "SELECT e.id, e.title, e.event_date 
-             FROM registrations r JOIN events e ON r.event_id = e.id
-             WHERE r.user_id = $user_id AND e.event_date < CURDATE() ORDER BY e.event_date DESC";
+             FROM registrations r 
+             JOIN events e ON r.event_id = e.id
+             WHERE r.user_id = $user_id AND e.is_ended = TRUE 
+             ORDER BY e.event_date DESC";
 $past_result = $conn->query($past_sql);
 ?>
 <!DOCTYPE html>
